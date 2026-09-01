@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>막시무스 · 이름의 유래</title>
+    <meta name="description" content="흰 말 막시무스에서 흰 차 막시무스로 — 이름의 유래를 한 장면씩 넘겨보는 이야기.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <style>
+        @import url(//fonts.googleapis.com/earlyaccess/jejumyeongjo.css);
+
+        :root {
+            --sky-top: #241a3d;
+            --sky: #1b1430;
+            --sky-deep: #120d22;
+            --lantern: #f0b94a;
+            --lantern-soft: #f7d68d;
+            --parchment: #f5efe3;
+            --muted: #b3a7cf;
+            --ring: rgba(240, 185, 74, 0.22);
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            font-family: 'Jeju Myeongjo', serif;
+            color: var(--parchment);
+            background: var(--sky-deep);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---- scroll deck ---- */
+        .deck {
+            height: 100dvh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+        }
+        .deck::-webkit-scrollbar { display: none; }
+
+        .panel {
+            position: relative;
+            height: 100dvh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(1.4rem, 4vh, 2.8rem);
+            padding: max(4.5rem, 9vh) clamp(1.25rem, 5vw, 3rem) max(3.5rem, 7vh);
+            text-align: center;
+            background:
+                radial-gradient(120% 80% at 50% 38%, rgba(240,185,74,0.10), rgba(240,185,74,0) 60%),
+                linear-gradient(180deg, var(--sky-top) 0%, var(--sky) 55%, var(--sky-deep) 100%);
+        }
+
+        /* faint distant lanterns */
+        .panel::before,
+        .panel::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(247,214,141,0.5), rgba(247,214,141,0) 70%);
+            pointer-events: none;
+        }
+        .panel::before { width: 6px; height: 6px; top: 22%; left: 16%; opacity: .5; }
+        .panel::after  { width: 4px; height: 4px; top: 30%; right: 20%; opacity: .4; }
+
+        /* ---- the "lantern" (image) ---- */
+        .lantern {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            padding: 10px;
+            background: linear-gradient(180deg, rgba(247,214,141,0.10), rgba(240,185,74,0.03));
+            box-shadow:
+                0 0 0 1px var(--ring),
+                0 26px 70px -26px rgba(240,185,74,0.55),
+                0 10px 40px -18px rgba(0,0,0,0.7);
+            opacity: 0;
+            transform: translateY(26px) scale(0.965);
+            transition: opacity .85s ease, transform .85s cubic-bezier(.2,.75,.2,1);
+        }
+        .lantern img {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: min(86vw, 500px);
+            max-height: 54dvh;
+            object-fit: contain;
+            border-radius: 9px;
+        }
+        .lantern.broken {
+            width: min(80vw, 360px);
+            height: 34dvh;
+        }
+        .lantern.broken img { display: none; }
+        .lantern.broken::after {
+            content: "이미지를 불러오지 못했어요";
+            color: var(--muted);
+            font-size: .95rem;
+        }
+
+        .panel.is-visible .lantern {
+            opacity: 1;
+            transform: none;
+        }
+        .panel.is-visible .lantern {
+            animation: float 6s ease-in-out 0.9s infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-9px); }
+        }
+
+        /* ---- caption ---- */
+        .caption {
+            max-width: min(90vw, 34ch);
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity .8s ease .18s, transform .8s cubic-bezier(.2,.75,.2,1) .18s;
+        }
+        .panel.is-visible .caption { opacity: 1; transform: none; }
+
+        .caption h2 {
+            margin: 0;
+            font-weight: 400;
+            font-size: clamp(1.3rem, 5.2vw, 2.05rem);
+            line-height: 1.5;
+            letter-spacing: -0.01em;
+        }
+        .caption p {
+            margin: 0.7rem 0 0;
+            color: var(--muted);
+            font-size: clamp(1.02rem, 3.6vw, 1.32rem);
+            line-height: 1.6;
+        }
+        .name { color: var(--lantern); }
+
+        .archive-link {
+            display: inline-block;
+            margin-top: 1.6rem;
+            color: var(--muted);
+            font-size: 0.98rem;
+            letter-spacing: 0.02em;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(179,167,207,0.35);
+            padding-bottom: 2px;
+            transition: color .3s ease, border-color .3s ease;
+        }
+        .archive-link:hover,
+        .archive-link:focus-visible {
+            color: var(--lantern-soft);
+            border-color: var(--lantern);
+        }
+        .archive-link:focus-visible {
+            outline: 2px solid var(--lantern-soft);
+            outline-offset: 4px;
+        }
+
+        /* opener gets a touch more presence */
+        .panel--open .caption h2 { font-size: clamp(1.45rem, 6vw, 2.35rem); }
+
+        /* ---- fixed wordmark ---- */
+        .wordmark {
+            position: fixed;
+            top: max(1.1rem, env(safe-area-inset-top));
+            left: clamp(1.1rem, 5vw, 2.2rem);
+            z-index: 5;
+            font-size: 1.02rem;
+            letter-spacing: 0.32em;
+            color: var(--lantern-soft);
+            text-indent: 0.32em;
+            opacity: 0.9;
+        }
+
+        /* ---- dot nav ---- */
+        .dots {
+            position: fixed;
+            top: 50%;
+            right: clamp(0.7rem, 2.5vw, 1.6rem);
+            transform: translateY(-50%);
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+        .dots button {
+            width: 9px; height: 9px;
+            padding: 0;
+            border: 0;
+            border-radius: 50%;
+            background: rgba(179,167,207,0.35);
+            cursor: pointer;
+            transition: background .3s ease, transform .3s ease, box-shadow .3s ease;
+        }
+        .dots button:hover { background: rgba(247,214,141,0.6); }
+        .dots button[aria-current="true"] {
+            background: var(--lantern);
+            transform: scale(1.35);
+            box-shadow: 0 0 0 4px rgba(240,185,74,0.16);
+        }
+        .dots button:focus-visible {
+            outline: 2px solid var(--lantern-soft);
+            outline-offset: 3px;
+        }
+
+        /* ---- scroll hint ---- */
+        .hint {
+            position: absolute;
+            bottom: max(1.6rem, 5vh);
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+            letter-spacing: 0.14em;
+            transition: opacity .5s ease;
+            animation: nudge 2.4s ease-in-out infinite;
+        }
+        .hint svg { width: 20px; height: 20px; stroke: var(--lantern-soft); }
+        .deck.scrolled .hint { opacity: 0; pointer-events: none; }
+        @keyframes nudge {
+            0%, 100% { transform: translate(-50%, 0); }
+            50%      { transform: translate(-50%, 6px); }
+        }
+
+        @media (max-width: 460px) {
+            .wordmark { font-size: 0.92rem; letter-spacing: 0.28em; }
+            .dots { gap: 0.7rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html, .deck { scroll-behavior: auto; }
+            .lantern, .caption { transition: opacity .3s ease; transform: none; }
+            .panel.is-visible .lantern { animation: none; }
+            .hint { animation: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wordmark">막시무스</div>
+
+    <nav class="dots" aria-label="장면 이동"></nav>
+
+    <main class="deck" id="deck">
+
+        <section class="panel panel--open" aria-label="1번째 장면">
+            <div class="lantern"><img src="Tangled.gif" alt="라푼젤 애니메이션 장면"></div>
+            <div class="caption">
+                <h2>왜 이름이 <span class="name">막시무스</span>인지 궁금하신가요?</h2>
+                <p>천천히 설명드리겠습니다 ~~</p>
+            </div>
+            <div class="hint">
+                <span>스크롤</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+            </div>
+        </section>
+
+        <section class="panel" aria-label="2번째 장면">
+            <div class="lantern"><img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F4PIVX%2FbtqS4LJvoLD%2FdX0REpGyP61kysJ31bFgYK%2Fimg.jpg" alt="영화 라푼젤 포스터"></div>
+            <div class="caption">
+                <h2>21세기 디즈니의 명작 중에 <span class="name">라푼젤</span>이라는 작품이 있습니다</h2>
+                <p>제 최애 영화인데여</p>
+            </div>
+        </section>
+
+        <section class="panel" aria-label="3번째 장면">
+            <div class="lantern"><img src="together.jpg" alt="라푼젤 등장인물들"></div>
+            <div class="caption">
+                <h2>가운데 있는 남주 이름이 <span class="name">유진</span>입니다!</h2>
+            </div>
+        </section>
+
+        <section class="panel" aria-label="4번째 장면">
+            <div class="lantern"><img src="https://pbs.twimg.com/media/Bm81QkyCEAEk2nj?format=jpg&name=medium" alt="라푼젤에 나오는 말 막시무스"></div>
+            <div class="caption">
+                <h2>오른쪽에 있는 말 이름은 <span class="name">막시무스</span>입니다.</h2>
+            </div>
+        </section>
+
+        <section class="panel" aria-label="5번째 장면">
+            <div class="lantern"><img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F125ED45A4DDA6F1B03" alt="흰색 말 막시무스"></div>
+            <div class="caption">
+                <h2>마침 <span class="name">트블</span>도 흰색! (WoW)</h2>
+                <p>그래서 막시무스가 되었답니다.</p>
+            </div>
+        </section>
+
+        <section class="panel" aria-label="6번째 장면">
+            <div class="lantern"><img src="https://www.themoviedb.org/t/p/original/AsqTqUjPbJzv2kceL4v0pmUmw6R.jpg" alt="막시무스"></div>
+            <div class="caption">
+                <h2>잘 부탁한다 ~</h2>
+            </div>
+        </section>
+
+        <section class="panel" aria-label="7번째 장면">
+            <div class="lantern"><img src="ddabong_man.jpeg" alt="엄지 척 하는 사람"></div>
+            <div class="caption">
+                <h2>이상으로 <span class="name">막시무스</span> 이름의 역사에 대해 알아보았습니다.</h2>
+                <a class="archive-link" href="original.html">예전 버전 보기</a>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const deck = document.getElementById('deck');
+        const panels = Array.from(deck.querySelectorAll('.panel'));
+        const nav = document.querySelector('.dots');
+
+        // build dot navigation
+        panels.forEach((panel, i) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.setAttribute('aria-label', (i + 1) + '번째 장면으로 이동');
+            b.addEventListener('click', () => {
+                panel.scrollIntoView({ behavior: 'smooth' });
+            });
+            nav.appendChild(b);
+        });
+        const dots = Array.from(nav.children);
+
+        // reveal + active dot via IntersectionObserver
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const i = panels.indexOf(entry.target);
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    if (entry.intersectionRatio > 0.55) {
+                        dots.forEach((d, di) => d.setAttribute('aria-current', di === i ? 'true' : 'false'));
+                    }
+                }
+            });
+        }, { threshold: [0.3, 0.6] });
+
+        panels.forEach(p => io.observe(p));
+        dots[0].setAttribute('aria-current', 'true');
+
+        // hide the scroll hint once the reader moves
+        deck.addEventListener('scroll', () => {
+            if (deck.scrollTop > 40) deck.classList.add('scrolled');
+        }, { passive: true });
+
+        // graceful fallback for images that fail to load
+        deck.querySelectorAll('.lantern img').forEach(img => {
+            img.addEventListener('error', () => img.closest('.lantern').classList.add('broken'));
+        });
+    </script>
+</body>
+</html>
